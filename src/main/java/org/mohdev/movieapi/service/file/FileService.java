@@ -1,4 +1,4 @@
-package org.mohdev.movieapi.service;
+package org.mohdev.movieapi.service.file;
 
 import org.springframework.web.multipart.MultipartFile;
 

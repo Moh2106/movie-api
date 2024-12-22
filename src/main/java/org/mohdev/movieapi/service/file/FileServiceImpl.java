@@ -1,5 +1,6 @@
-package org.mohdev.movieapi.service;
+package org.mohdev.movieapi.service.file;
 
+import org.mohdev.movieapi.service.file.FileService;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -9,7 +10,7 @@ import java.nio.file.Paths;
 import java.nio.file.StandardCopyOption;
 
 @Service
-public class FileServiceImpl implements FileService{
+public class FileServiceImpl implements FileService {
     @Override
     public String uploadFile(String path, MultipartFile file) throws IOException {
         // Get the name of the file

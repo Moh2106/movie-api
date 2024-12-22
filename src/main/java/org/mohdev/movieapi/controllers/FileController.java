@@ -2,7 +2,7 @@ package org.mohdev.movieapi.controllers;
 
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
-import org.mohdev.movieapi.service.FileService;
+import org.mohdev.movieapi.service.file.FileService;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
@@ -17,8 +17,11 @@ import java.io.InputStream;
 @RequiredArgsConstructor
 @RequestMapping("/api/v1/file")
 public class FileController {
+
     private final FileService fileService;
-    @Value("${project.path}")
+
+
+    @Value("${project.poster}")
     private String path;
 
     @PostMapping("/upload")

@@ -5,14 +5,14 @@ import jakarta.persistence.Column;
 import jakarta.persistence.ElementCollection;
 import jakarta.validation.constraints.NotBlank;
 import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import java.util.Set;
 
 @Data
-@AllArgsConstructor
-@NoArgsConstructor
+@Builder
 public class MovieDto {
     private Integer id;
 
@@ -29,12 +29,8 @@ public class MovieDto {
 
     private Set<String> movieCast;
 
-    @NotBlank(message = "Please provide release movie's release year")
+
     private Integer releaseYear;
 
-    @NotBlank(message = "Please provide movie's poster")
-    private String poster;
 
-    @NotBlank(message = "Please provide movie's poster url")
-    private String posterUrl;
 }

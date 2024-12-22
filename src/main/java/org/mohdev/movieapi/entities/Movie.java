@@ -2,10 +2,7 @@ package org.mohdev.movieapi.entities;
 
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotBlank;
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
 
 import java.util.Set;
 
@@ -14,6 +11,7 @@ import java.util.Set;
 @AllArgsConstructor
 @Getter
 @Setter
+@Builder
 public class Movie {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -36,11 +34,7 @@ public class Movie {
     private Set<String> movieCast;
 
     @Column(nullable = false)
-    @NotBlank(message = "Please provide release year's title")
     private Integer releaseYear;
 
-    @Column(nullable = false)
-    @NotBlank(message = "Please provide poster's title")
-    private String poster;
 
 }
