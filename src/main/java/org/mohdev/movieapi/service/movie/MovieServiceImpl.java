@@ -2,8 +2,14 @@ package org.mohdev.movieapi.service.movie;
 
 import lombok.RequiredArgsConstructor;
 import org.mohdev.movieapi.dtos.MovieDto;
+import org.mohdev.movieapi.dtos.MoviePageResponse;
 import org.mohdev.movieapi.entities.Movie;
+import org.mohdev.movieapi.exceptions.MoviesNotFoundException;
 import org.mohdev.movieapi.repositories.MovieRepository;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
@@ -44,7 +50,7 @@ public class MovieServiceImpl implements MovieService{
     @Override
     public MovieDto getMovie(Integer id) {
         Movie byId = movieRepository.findById(id).orElseThrow(
-                () -> new RuntimeException("Movie doesn't exist")
+                () -> new  MoviesNotFoundException("Movies not found")
         );
 
         // Map Movie to Movie dto
@@ -80,5 +86,77 @@ public class MovieServiceImpl implements MovieService{
             movieDtos.add(build);
         }
         return movieDtos;
+    }
+
+    @Override
+    public MoviePageResponse getAllMovieWithPaination(Integer pageNumber, Integer pageSize) {
+        Pageable pageable = PageRequest.of(pageNumber, pageSize);
+
+        Page<Movie> moviePage = movieRepository.findAll(pageable);
+        List<Movie> movies = moviePage.getContent();
+
+        List<MovieDto> movieDtos = new ArrayList<>();
+
+        // 2- Iterate through the list
+        for (Movie movie: movies
+        ) {
+            MovieDto build = MovieDto.builder()
+                    .id(movie.getId())
+                    .title(movie.getTitle())
+                    .director(movie.getDirector())
+                    .studio(movie.getStudio())
+                    .releaseYear(movie.getReleaseYear())
+                    .movieCast(movie.getMovieCast())
+                    .build();
+
+            movieDtos.add(build);
+        }
+
+        return MoviePageResponse.builder()
+                .movieDtos(movieDtos)
+                .pageNumber(pageNumber)
+                .pageSize(pageSize)
+                .totalPages(moviePage.getTotalPages())
+                .totalElements(moviePage.getNumberOfElements())
+                .isLast(moviePage.isLast())
+                .build();
+    }
+
+    @Override
+    public MoviePageResponse getAllMovieWithPainationAndSorting(Integer pageNumber, Integer pageSize, String sortBy, String dir) {
+        Sort sort = sortBy.equalsIgnoreCase("asc") ? Sort.by(dir)
+                : Sort.by(dir).descending();
+
+        Pageable pageable = PageRequest.of(pageNumber, pageSize, sort);
+
+        Page<Movie> moviePage = movieRepository.findAll(pageable);
+        List<Movie> movies = moviePage.getContent();
+
+        List<MovieDto> movieDtos = new ArrayList<>();
+
+        // 2- Iterate through the list
+        for (Movie movie: movies
+        ) {
+            MovieDto build = MovieDto.builder()
+                    .id(movie.getId())
+                    .title(movie.getTitle())
+                    .director(movie.getDirector())
+                    .studio(movie.getStudio())
+                    .releaseYear(movie.getReleaseYear())
+                    .movieCast(movie.getMovieCast())
+                    .build();
+
+            movieDtos.add(build);
+        }
+
+        return MoviePageResponse.builder()
+                .movieDtos(movieDtos)
+                .pageNumber(pageNumber)
+                .pageSize(pageSize)
+                .totalPages(moviePage.getTotalPages())
+                .totalElements(moviePage.getNumberOfElements())
+                .isLast(moviePage.isLast())
+                .build();
+
     }
 }
